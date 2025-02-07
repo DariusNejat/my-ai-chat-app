@@ -1,0 +1,25 @@
+/* FoodDataDisplay.css */
+
+.food-data {
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    padding: 12px;
+  }
+  
+  .food-data h4 {
+    margin: 0 0 8px;
+    color: #333;
+  }
+  
+  .food-data ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .food-data li {
+    padding: 4px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  

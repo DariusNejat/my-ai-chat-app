@@ -1,23 +1,29 @@
-// src/components/ChatWindow.jsx
-import React, { useEffect, useRef } from 'react';
-import ChatMessage from './ChatMessage';
+import React, { useEffect, useRef } from "react";
 
-const ChatWindow = ({ messages }) => {
-  const chatEndRef = useRef(null);
+function ChatWindow({ messages, isLoading = false }) { // default isLoading to false
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to the latest message
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]); // dependency array always has 2 items
 
   return (
     <div className="chat-window">
       {messages.map((msg, index) => (
-        <ChatMessage key={index} message={msg} />
+        <div key={index} className={`message ${msg.sender}`}>
+          <div className={`message-bubble ${msg.sender}`}>
+            {msg.text}
+          </div>
+        </div>
       ))}
-      <div ref={chatEndRef} />
+      {isLoading && (
+        <div className="message ai">
+          <div className="message-bubble ai">Generating response...</div>
+        </div>
+      )}
+      <div ref={messagesEndRef} />
     </div>
   );
-};
+}
 
 export default ChatWindow;

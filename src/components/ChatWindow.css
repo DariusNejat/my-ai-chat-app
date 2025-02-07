@@ -1,0 +1,46 @@
+/* src/components/ChatWindow.css */
+.chat-window {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f2f2f2;
+  }
+  
+  /* Container for each message */
+  .message {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  /* Align user messages to the right and AI messages to the left */
+  .message.user {
+    justify-content: flex-end;
+  }
+  
+  .message.ai {
+    justify-content: flex-start;
+  }
+  
+  /* Styling for the chat bubbles */
+  .message-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  /* User’s chat bubble styling */
+  .message.user .message-bubble {
+    background-color: #0084ff;
+    color: #fff;
+    border-bottom-right-radius: 0;
+  }
+  
+  /* AI’s chat bubble styling */
+  .message.ai .message-bubble {
+    background-color: #e5e5ea;
+    color: #000;
+    border-bottom-left-radius: 0;
+  }
+  
