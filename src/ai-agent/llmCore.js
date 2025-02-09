@@ -7,7 +7,7 @@ export async function callLLM(prompt, toolData = null) {
         finalPrompt += `\n\nConsider this food's impact:\n${JSON.stringify(toolData)}`;
     }
     // Replace with your valid OpenAI API key
-    const API_KEY = "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";
+    const API_KEY = "ur api code";
     const API_URL = "https://openrouter.ai/api/v1/chat/completions";
     const MODEL_NAME = "deepseek/deepseek-r1:free";
     // Build the JSON body with the required "messages" array
