@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState } from "react";
 import ChatWindow from "./components/ChatWindow";
 import ChatInput from "./components/ChatInput";
@@ -9,45 +10,35 @@ import "./App.css";
 
 function App() {
   const [messages, setMessages] = useState([]);
+  // foodData: آرایه‌ای از اشیاء به صورت { food, data }
   const [foodData, setFoodData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessage = async (messageText) => {
-    if (isLoading) return; // Prevent spamming
+    if (isLoading) return; // جلوگیری از ارسال پیام‌های اضافی
 
-    // Append user's message
     const userMessage = { text: messageText, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
 
     setIsLoading(true);
 
-    // // Detect a food item in the message
-    // const detectedFood = detectFood(messageText);
-    // let nutritionData = null;
-    // if (detectedFood) {
-    //   nutritionData = await getFoodNutrition(detectedFood);
-    //   setFoodData(nutritionData);
-    // }
-    // console.log("Nutrition data obtained:", nutritionData);
-
-    // Detect multiple food items
-    const detectedFoods = detectFood(messageText);
-    let nutritionData = [];
-
-    if (detectedFoods) {
+    // Detect foods in the message
+    const detectedFoods = await detectFood(messageText);
+    let nutritionDataArr = [];
+    if (detectedFoods && detectedFoods.length > 0) {
+      // For each detected food, get nutrition data (cached or via API)
       for (const food of detectedFoods) {
         const data = await getFoodNutrition(food);
         if (data) {
-          nutritionData.push({ food, data });
+          nutritionDataArr.push({ food, data });
         }
       }
-      setFoodData(nutritionData); // Store multiple foods' data
+      setFoodData(nutritionDataArr);
     }
-
-    console.log("Nutrition data obtained:", nutritionData);
+    console.log("Nutrition data obtained:", nutritionDataArr);
     
-    // Pass the nutrition data to the LLM prompt; do not add as a separate message
-    const aiResponse = await callLLM(messageText, nutritionData);
+    // ارسال داده‌های تغذیه‌ای (به صورت آرایه) به مدل LLM برای بهبود پاسخ
+    const aiResponse = await callLLM(messageText, nutritionDataArr);
     const aiMessage = { text: aiResponse, sender: "ai" };
     setMessages((prev) => [...prev, aiMessage]);
 

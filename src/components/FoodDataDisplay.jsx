@@ -3,9 +3,10 @@ import React from "react";
 import "./FoodDataDisplay.css";
 
 const FoodDataDisplay = ({ foodData }) => {
-  if (!foodData) return null;
+  if (!foodData || !Array.isArray(foodData)) return null;
 
-  // Define a list of key nutrition facts to display
+  console.log("inside food data display data is", foodData)
+  // تعریف فیلدهای مهم جهت نمایش
   const fields = [
     { key: "energy-kcal_value", label: "Energy (kcal)" },
     { key: "fat_value", label: "Fat (g)" },
@@ -16,22 +17,31 @@ const FoodDataDisplay = ({ foodData }) => {
     { key: "salt_value", label: "Salt (g)" },
   ];
 
-  const getValue = (field) => {
-    if (foodData[field.key] !== undefined) {
-      return foodData[field.key];
-    }
-    // fallback: remove hyphens if necessary
-    const altKey = field.key.replace(/-/g, "");
-    return foodData[altKey] !== undefined ? foodData[altKey] : "N/A";
+  // تابعی جهت تجمیع (جمع یا میانگین) مقادیر یک فیلد در بین تمام غذاها
+  const aggregateValue = (field) => {
+    let sum = 0;
+    let count = 0;
+    foodData.forEach((item) => {
+      let value = item.data[field.key];
+      if (value === undefined) {
+        const altKey = field.key.replace(/-/g, "");
+        value = item.data[altKey];
+      }
+      if (typeof value === "number") {
+        sum += value;
+        count++;
+      }
+    });
+    return count > 0 ? sum.toFixed(2) : "N/A";
   };
 
   return (
     <div className="food-data">
-      <h4>Nutrition Summary</h4>
+      <h4>Nutrition Summary (Aggregated)</h4>
       <ul>
         {fields.map((field) => (
           <li key={field.key}>
-            <strong>{field.label}:</strong> {getValue(field)}
+            <strong>{field.label}:</strong> {aggregateValue(field)}
           </li>
         ))}
       </ul>
